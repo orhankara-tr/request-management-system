@@ -1,0 +1,100 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Talep Yönetim Sistemi | Giriş</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="~/AdminLTE-3.0.4/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/AdminLTE-3.0.4/dist/css/adminlte.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <style>
+        .login-page {
+            background-color: #343a40 !important;
+        }
+        /* Arka planı koyulaştırdık */
+        .input-group-text {
+            background-color: #ffffff !important;
+        }
+        /* İkon kutusu beyaz */
+    </style>
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="#" class="text-white"><b>Talep</b> Yönetim Sistemi</a>
+        </div>
+
+        <div class="card shadow-lg" style="border-radius: 15px;">
+            <div class="card-body login-card-body" style="border-radius: 15px;">
+                <p class="login-box-msg text-bold">Lütfen Bilgilerinizi Girin</p>
+
+                @using (Html.BeginForm("Index", "Login", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="input-group mb-3">
+                        <input type="text" name="Username" class="form-control" placeholder="Kullanıcı Adı" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user text-dark"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-2">
+                        <input type="password" name="PasswordHash" id="password-field" class="form-control" placeholder="Şifre" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock text-dark"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input class="custom-control-input" type="checkbox" id="showPassword" onclick="togglePassword()">
+                                <label for="showPassword" class="custom-control-label" style="cursor:pointer; font-weight:normal;">Şifreyi Göster</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block shadow-sm py-2 text-bold">
+                                <i class="fas fa-sign-in-alt mr-2"></i> SİSTEME GİRİŞ YAP
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <small class="text-white-50">© 2026 Tüm Hakları Saklıdır</small>
+        </div>
+    </div>
+
+    <script src="~/AdminLTE-3.0.4/plugins/jquery/jquery.min.js"></script>
+    <script src="~/AdminLTE-3.0.4/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function togglePassword() {
+            var x = document.getElementById("password-field");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+</body>
+</html>

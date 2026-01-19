@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace EntityLayer.Concrete
-{
-    using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
     namespace EntityLayer.Concrete
     {
-        public enum UserRole
-        {
+        public enum UserRole 
+    {
             [Display(Name = "Kullanıcı")]
             Kullanici = 1,
 
@@ -61,7 +58,13 @@ namespace EntityLayer.Concrete
             Onaylandi = 3,
 
             [Display(Name = "Reddedildi")]
-            Reddedildi = 4
+            Reddedildi = 4,
+
+            [Display(Name = "Devam Ediyor")]
+            DevamEdiyor = 5,
+
+            [Display(Name = "Tamamlandı")]
+            Tamamlandi = 6
         }
     }
-}
+

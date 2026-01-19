@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EntityLayer.Concrete;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,13 +27,13 @@ namespace EntityLayer.Concrete
         public string Description { get; set; }
 
         [Required]
-        public int RequestTypeId { get; set; }  // 1=Hata, 2=Özellik, 3=Destek, 4=Diğer
+        public RequestType RequestTypeId { get; set; } = RequestType.Diger; // 1=Hata, 2=Özellik, 3=Destek, 4=Diğer
 
         [Required]
-        public int PriorityId { get; set; }  // 1=Düşük, 2=Orta, 3=Yüksek
+        public Priority PriorityId { get; set; } = Priority.Dusuk;  // 1=Düşük, 2=Orta, 3=Yüksek
 
         [Required]
-        public int StatusId { get; set; } = 1;  // 1=Taslak, 2=Onay Bekliyor, 3=Onaylandı, 4=Reddedildi
+        public RequestStatus StatusId { get; set; } = RequestStatus.Taslak;  // 1=Taslak, 2=Onay Bekliyor, 3=Onaylandı, 4=Reddedildi
 
         [Required]
         public int CreatedByUserId { get; set; }

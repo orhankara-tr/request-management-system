@@ -1,0 +1,135 @@
+﻿@model EntityLayer.Concrete.User
+
+@{
+    ViewBag.Title = "Yeni Kullanıcı Kaydı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row pt-4">
+            <div class="col-md-8 mx-auto">
+
+                <div class="card card-primary card-outline shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title text-bold"><i class="fas fa-user-plus mr-2"></i> Yeni Kullanıcı Kaydı</h3>
+                    </div>
+
+                    @using (Html.BeginForm("AddUser", "AdminUser", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Kullanıcı Adı</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-at"></i></span>
+                                            </div>
+                                            @Html.TextBoxFor(x => x.Username, new { @class = "form-control", placeholder = "Kullanıcı adı..." })
+                                        </div>
+                                        @Html.ValidationMessageFor(x => x.Username, "", new { @class = "text-danger d-block mt-1" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Ad Soyad</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            </div>
+                                            @Html.TextBoxFor(x => x.FullName, new { @class = "form-control", placeholder = "Ad Soyad..." })
+                                        </div>
+                                        @Html.ValidationMessageFor(x => x.FullName, "", new { @class = "text-danger text-sm" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>E-Posta</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    </div>
+                                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", type = "email", placeholder = "ornek@teyas.com.tr" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger d-block mt-1" })
+                            </div>
+
+                            <div class="form-group">
+                                <label>Şifre</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    </div>
+                                    @Html.TextBoxFor(x => x.PasswordHash, new { @class = "form-control", placeholder = "Şifreyi buradan görebilirsin..." })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.PasswordHash, "", new { @class = "text-danger d-block mt-1" })
+                            </div>
+
+                            <hr />
+
+                            <div class="form-group mt-4">
+                                <label class="d-block mb-3">Kullanıcı Rolü</label>
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <div class="custom-control custom-radio">
+                                            @Html.RadioButtonFor(x => x.RoleId, 1, new { @id = "role1", @class = "custom-control-input" })
+                                            <label for="role1" class="custom-control-label">Personel</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="custom-control custom-radio">
+                                            @Html.RadioButtonFor(x => x.RoleId, 2, new { @id = "role2", @class = "custom-control-input" })
+                                            <label for="role2" class="custom-control-label">Yönetici</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="custom-control custom-radio">
+                                            @Html.RadioButtonFor(x => x.RoleId, 3, new { @id = "role3", @class = "custom-control-input" })
+                                            <label for="role3" class="custom-control-label">Admin</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center w-100">
+                                    @Html.ValidationMessageFor(x => x.RoleId, "", new { @class = "text-danger d-block text-sm mt-2" })
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                    @Html.CheckBoxFor(x => x.IsActive, new { @id = "customSwitch3", @class = "custom-control-input" })
+                                    <label class="custom-control-label" for="customSwitch3">Hesap Aktif Olsun mu?</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-light">
+                            <button type="submit" id="btn-save" class="btn btn-primary float-right shadow-sm ml-2">
+                                <i class="fas fa-check mr-1"></i> Kaydı Tamamla
+                            </button>
+                            <a href="/AdminUser/Index" class="btn btn-default float-right">İptal</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    $('form').submit(function (e) {
+        swal({
+            title: "İşlem Yapılıyor",
+            text: "Lütfen bekleyiniz...",
+            icon: "info",
+            buttons: false,
+            closeOnClickOutside: false
+        });
+    });
+</script>
+
+

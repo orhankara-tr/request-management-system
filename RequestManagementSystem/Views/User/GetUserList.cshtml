@@ -1,0 +1,38 @@
+﻿@using EntityLayer.Concrete
+@model List<User>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<br />
+<table class="table table-bordered">
+    <tr>
+        <th>User ID</th>
+        <th>Username</th>
+        <th>PasswordHash</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>IsActive</th>
+        <th>CreatedDate</th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.UserId</td>
+            <td>@user.Username</td>
+            <td>@user.PasswordHash</td>
+            <td>@user.FullName</td>
+            <td>@user.Email</td>
+            <td>@user.RoleId</td>
+            <td>@(user.IsActive ? "Evet" : "Hayır")</td>
+            <td>@user.CreatedDate.ToString("yyyy-MM-dd")</td>
+            <td><a href="" class="btn btn-primary">Düzenle</a></td>
+            <td><a href="" class="btn btn-danger">Sil</a></td>
+        </tr>
+    }
+</table>
+<br />
