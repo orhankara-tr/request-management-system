@@ -7,14 +7,14 @@
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<DataAccessLayer.concrete.Context>
+    internal sealed class Configuration : DbMigrationsConfiguration<DataAccessLayer.Concrete.Context>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(DataAccessLayer.concrete.Context context)
+        protected override void Seed(DataAccessLayer.Concrete.Context context)
         {
             // KULLANICILAR
             context.Users.AddOrUpdate(
@@ -25,7 +25,7 @@
                     PasswordHash = "Mkc2024!",
                     FullName = "Mehmet Koç",
                     Email = "mehmet.koc@teyas.com.tr",
-                    RoleId = 3,
+                    RoleId = (UserRole)3,  // Admin
                     IsActive = true,
                     CreatedDate = new DateTime(2024, 5, 10, 9, 0, 0)
                 },
@@ -35,7 +35,7 @@
                     PasswordHash = "Adm2024!",
                     FullName = "Ayşe Demir",
                     Email = "ayse.demir@teyas.com.tr",
-                    RoleId = 2,
+                    RoleId = (UserRole)2, // Yonetici
                     IsActive = true,
                     CreatedDate = new DateTime(2024, 8, 15, 10, 30, 0)
                 },
@@ -45,7 +45,7 @@
                     PasswordHash = "Okr2024!",
                     FullName = "Orhan Kara",
                     Email = "orhan.kara@teyas.com.tr",
-                    RoleId = 1,
+                    RoleId = (UserRole)1, // Kullanici
                     IsActive = true,
                     CreatedDate = new DateTime(2024, 11, 18, 10, 15, 0)
                 },
@@ -55,7 +55,7 @@
                     PasswordHash = "Fck2024!",
                     FullName = "Fatma Çelik",
                     Email = "fatma.celik@teyas.com.tr",
-                    RoleId = 1,
+                    RoleId = (UserRole)1, // Kullanici
                     IsActive = true,
                     CreatedDate = new DateTime(2024, 12, 5, 11, 20, 0)
                 }
@@ -71,9 +71,9 @@
                     RequestNo = "TYS-2025-00000001",
                     Title = "Personel bilgi sistemi şifre sıfırlama sorunu",
                     Description = "PERBİS uygulamasında şifre sıfırlama işlemi gerçekleştirilemiyor.",
-                    RequestTypeId = 1,
-                    PriorityId = 3,
-                    StatusId = 3,
+                    RequestTypeId = (RequestType)1, // Yazılım Hatası
+                    PriorityId = (Priority)3,       // Yüksek
+                    StatusId = (RequestStatus)3,    // İşlem Tamamlandı
                     CreatedByUserId = 3,
                     ProcessedByUserId = 2,
                     CreatedDate = new DateTime(2025, 1, 6, 10, 15, 0),
@@ -85,9 +85,9 @@
                     RequestNo = "TYS-2025-00000002",
                     Title = "Cami görevlendirme modülü geliştirme",
                     Description = "İl müftülüklerinin cami görevlendirmelerini dijital ortamda yapabilmesi için yeni modül gerekiyor.",
-                    RequestTypeId = 2,
-                    PriorityId = 2,
-                    StatusId = 2,
+                    RequestTypeId = (RequestType)2, // Özellik Talebi
+                    PriorityId = (Priority)2,       // Orta
+                    StatusId = (RequestStatus)2,    // Onay Bekliyor
                     CreatedByUserId = 2,
                     CreatedDate = new DateTime(2025, 1, 8, 9, 30, 0)
                 },
@@ -96,9 +96,9 @@
                     RequestNo = "TYS-2025-00000003",
                     Title = "Mobil uygulama Android 15 uyumluluk hatası",
                     Description = "Diyanet mobil uygulaması Android 15'te açılmıyor.",
-                    RequestTypeId = 1,
-                    PriorityId = 3,
-                    StatusId = 2,
+                    RequestTypeId = (RequestType)1,  // Yazılım Hatası
+                    PriorityId = (Priority)3,        // Yüksek
+                    StatusId = (RequestStatus)2,     // Onay Bekliyor
                     CreatedByUserId = 4,
                     CreatedDate = new DateTime(2025, 1, 10, 14, 45, 0)
                 },
@@ -107,9 +107,9 @@
                     RequestNo = "TYS-2025-00000004",
                     Title = "VPN bağlantı hatası",
                     Description = "Taşra teşkilatından VPN ile merkeze bağlanırken hata alınıyor.",
-                    RequestTypeId = 3,
-                    PriorityId = 3,
-                    StatusId = 3,
+                    RequestTypeId = (RequestType)3, // Destek Talebi
+                    PriorityId = (Priority)3,       // Yüksek
+                    StatusId = (RequestStatus)3,    // İşlem Tamamlandı
                     CreatedByUserId = 3,
                     ProcessedByUserId = 1,
                     CreatedDate = new DateTime(2025, 1, 13, 8, 50, 0),
@@ -121,9 +121,9 @@
                     RequestNo = "TYS-2025-00000005",
                     Title = "İzin takip sistemi yıllık izin hesaplama hatası",
                     Description = "Personel izin takip modülünde yıllık izin günleri yanlış hesaplanıyor.",
-                    RequestTypeId = 1,
-                    PriorityId = 2,
-                    StatusId = 1,
+                    RequestTypeId = (RequestType)1, // Yazılım Hatası
+                    PriorityId = (Priority)2,       // Orta
+                    StatusId = (RequestStatus)1,    // Taslak
                     CreatedByUserId = 4,
                     CreatedDate = new DateTime(2025, 1, 16, 14, 30, 0)
                 }

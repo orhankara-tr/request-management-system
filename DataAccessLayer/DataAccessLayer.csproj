@@ -51,10 +51,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="concrete\Context.cs" />
+    <Compile Include="Abstract\IRepository.cs" />
+    <Compile Include="Abstract\IRequestDal.cs" />
+    <Compile Include="Abstract\IRequestHistoryDal.cs" />
+    <Compile Include="Abstract\IUserDal.cs" />
+    <Compile Include="Concrete\Context.cs" />
+    <Compile Include="Concrete\Repositories\GenericRepository.cs" />
+    <Compile Include="EntityFramework\EFRequestDal.cs" />
+    <Compile Include="EntityFramework\EFRequestHistoryDal.cs" />
+    <Compile Include="EntityFramework\EFUserDal.cs" />
     <Compile Include="Migrations\202601171321509_InitialCreate.cs" />
     <Compile Include="Migrations\202601171321509_InitialCreate.Designer.cs">
       <DependentUpon>202601171321509_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601181727002_Migration1.cs" />
+    <Compile Include="Migrations\202601181727002_Migration1.Designer.cs">
+      <DependentUpon>202601181727002_Migration1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,7 +85,11 @@
     <EmbeddedResource Include="Migrations\202601171321509_InitialCreate.resx">
       <DependentUpon>202601171321509_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601181727002_Migration1.resx">
+      <DependentUpon>202601181727002_Migration1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
