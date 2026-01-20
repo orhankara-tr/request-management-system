@@ -1,0 +1,109 @@
+﻿@using EntityLayer.Concrete
+@model Request
+
+@{
+    ViewBag.Title = "Talep Detayı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@{
+    bool isAdminOrManager = ViewBag.IsAdminOrManager != null && (bool)ViewBag.IsAdminOrManager;
+    string returnUrl = isAdminOrManager ? Url.Action("Index", "Request") : Url.Action("MyRequests", "Request");
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Talep Detayı: #@Model.RequestNo</h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                <a href="@returnUrl" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Listeye Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-info card-outline shadow">
+            <div class="card-header">
+                <h3 class="card-title text-bold">@Model.Title</h3>
+                <div class="card-tools">
+                    @if (Model.StatusId == RequestStatus.Taslak)
+                    {
+                        <a href="/Request/Edit/@Model.RequestId" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit mr-1"></i> Düzenle
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Talep No</b> <a class="float-right text-primary">@Model.RequestNo</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Tür</b>
+                                <span class="float-right badge badge-info">@((RequestType)Model.RequestTypeId)</span>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Öncelik</b>
+                                <span class="float-right badge badge-danger">@((Priority)Model.PriorityId)</span>
+                            </li>
+                            <li class="list-group-item border-bottom-0">
+                                <b>Durum</b>
+                                <span class="float-right badge badge-warning">@((RequestStatus)Model.StatusId)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="bg-light p-3 border rounded shadow-sm h-100">
+                            <strong><i class="fas fa-file-alt mr-1"></i> Açıklama</strong>
+                            <p class="text-muted mt-2">
+                                @Model.Description
+                            </p>
+                            @if (!string.IsNullOrWhiteSpace(Model.ApprovalNotes) &&
+(Model.StatusId == RequestStatus.Onaylandi || Model.StatusId == RequestStatus.Reddedildi))
+                            {
+                                var calloutClass = Model.StatusId == RequestStatus.Reddedildi
+                                    ? "callout callout-danger"
+                                    : "callout callout-success";
+
+                                <div class="@calloutClass mt-3">
+                                    <h5 class="mb-1">
+                                        <i class="fas fa-user-check mr-1"></i> Yönetici Notu
+                                    </h5>
+                                    <p class="mb-0">@Model.ApprovalNotes</p>
+                                </div>
+                            }
+                            <hr>
+                            <small class="text-muted">
+                                <i class="fas fa-calendar-plus mr-1"></i> Oluşturma: @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm") <br />
+                                @if (Model.UpdatedDate.HasValue)
+                                {
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-history mr-1"></i>
+                                        Son Güncelleme: @Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")
+                                    </small>
+                                }
+                                else
+                                {
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-history mr-1"></i>
+                                        Son Güncelleme: Henüz güncellenmedi
+                                    </small>
+                                }
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

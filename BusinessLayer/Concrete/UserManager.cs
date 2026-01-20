@@ -28,6 +28,11 @@ namespace BusinessLayer.Concrete
 
         public void Add(User user)
         {
+            var exists = _userDal.Get(x => x.Email == user.Email);
+            if (exists != null)
+            {
+                throw new Exception("Bu e-posta zaten kayıtlı!");
+            }
             _userDal.Insert(user);
         }
 

@@ -1,5 +1,7 @@
-﻿@using EntityLayer.Concrete
-@model List<User>
+﻿@using PagedList
+@using PagedList.Mvc
+@using EntityLayer.Concrete
+@model PagedList.IPagedList<User>
 
 @{
     ViewBag.Title = "Kullanıcı Yönetimi";
@@ -20,7 +22,7 @@
     <div class="container-fluid">
         <div class="card card-primary card-outline shadow">
             <div class="card-header">
-                <h3 class="card-title mt-1">Kullanıcı Listesi ve Yetkilendirme</h3>
+                <h3 class="card-title text-bold">Kullanıcı Listesi ve Yetkilendirme</h3>
                 <div class="card-tools">
                     <a href="/AdminUser/AddUser" class="btn btn-success btn-sm shadow-sm">
                         <i class="fas fa-plus-circle mr-1"></i> Yeni Kullanıcı Ekle
@@ -79,21 +81,50 @@
                                 <td>@user.CreatedDate.ToString("dd.MM.yyyy")</td>
                                 <td class="text-right">
                                     <div class="btn-group">
-                                        <a href="@Url.Action("EditUser", "AdminUser", new { id = user.UserId })" class="btn btn-default btn-sm border shadow-sm" title="Düzenle">
-                                            <i class="fas fa-edit text-info"></i>
-                                        </a>
-                                        <button onclick="DeleteUser(@user.UserId)" class="btn btn-default btn-sm border shadow-sm" title="Sil">
-                                            <i class="fas fa-trash text-danger"></i>
-                                        </button>
-                                        <button onclick="ChangeStatus(@user.UserId)" class="btn btn-default btn-sm border shadow-sm" title="Durum Değiştir">
-                                            <i class="fas fa-sync text-secondary"></i>
-                                        </button>
+                                        @if (user.RoleId == UserRole.Admin)
+                                        {
+                                            <button class="btn btn-default btn-sm border shadow-sm" disabled title="Admin kullanıcı düzenlenemez">
+                                                <i class="fas fa-edit text-muted"></i>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("EditUser", "AdminUser", new { id = user.UserId })" class="btn btn-default btn-sm border shadow-sm" title="Düzenle">
+                                                <i class="fas fa-edit text-info"></i>
+                                            </a>
+                                        }
+                                        @if (user.UserId.ToString() != Session["UserId"]?.ToString())
+                                        {
+                                            <button onclick="DeleteUser(@user.UserId)" class="btn btn-default btn-sm border" title="Sil">
+                                                <i class="fas fa-trash text-danger"></i>
+                                            </button>
+
+                                            <button onclick="ChangeStatus(@user.UserId)" class="btn btn-default btn-sm border" title="Durum Değiştir">
+                                                <i class="fas fa-sync text-secondary"></i>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-default btn-sm border shadow-sm" disabled title="Hesabınızı silemezsiniz">
+                                                <i class="fas fa-trash text-muted"></i>
+                                            </button>
+                                            <button class="btn btn-default btn-sm border shadow-sm" disabled title="Durumunuzu değiştiremezsiniz">
+                                                <i class="fas fa-sync text-muted"></i>
+                                            </button>
+                                        }
                                     </div>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
+            </div>
+            <div class="card-footer clearfix">
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+                {
+                    LiElementClasses = new List<string> { "page-item" },
+                    UlElementClasses = new List<string> { "pagination pagination-sm m-0 float-right" }
+                })
             </div>
         </div>
     </div>
@@ -102,6 +133,11 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     function DeleteUser(id) {
+        var currentUserId = '@Session["UserId"]';
+        if (id == currentUserId) {
+            swal("Hata!", "Yönetici hesabınızı sistemden silemezsiniz.", "error");
+            return;
+        }
         swal({
             title: "Emin misiniz?",
             text: "Kullanıcı kaydı sistemden kalıcı olarak silinecektir!",
@@ -116,6 +152,11 @@
     }
 
     function ChangeStatus(id) {
+        var currentUserId = '@Session["UserId"]';
+        if (id == currentUserId) {
+            swal("Hata!", "Yönetici hesabınızın durumunu değiştiremezsiniz.", "error");
+            return;
+        }
         swal({
             title: "Durum Güncellensin mi?",
             text: "Kullanıcının sisteme giriş yetkisi değişecektir.",
@@ -127,4 +168,13 @@
             }
         });
     }
+</script>
+
+<script>
+    $(document).ready(function () {
+        var msg = '@TempData["Error"]';
+        if (msg) {
+            swal("İşlem Engellendi", msg, "error");
+        }
+    });
 </script>

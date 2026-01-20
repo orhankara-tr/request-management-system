@@ -19,11 +19,9 @@
         .login-page {
             background-color: #343a40 !important;
         }
-        /* Arka planı koyulaştırdık */
         .input-group-text {
             background-color: #ffffff !important;
         }
-        /* İkon kutusu beyaz */
     </style>
 </head>
 <body class="hold-transition login-page">
@@ -87,14 +85,26 @@
     <script src="~/AdminLTE-3.0.4/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        function togglePassword() {
-            var x = document.getElementById("password-field");
-            if (x.type === "password") {
-                x.type = "text";
-            } else {
-                x.type = "password";
-            }
+    $(document).ready(function () {
+        var error = '@ViewBag.ErrorMessage';
+        if (error && error.length > 0) {
+            swal({
+                title: "Giriş Başarısız!",
+                text: error,
+                icon: "error",
+                button: "Tamam",
+            });
         }
+    });
+
+    function togglePassword() {
+        var x = document.getElementById("password-field");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
     </script>
 </body>
 </html>

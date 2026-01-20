@@ -1,0 +1,104 @@
+﻿@model EntityLayer.Concrete.Request
+
+@{
+    ViewBag.Title = "Talebi Düzenle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    bool isEditable = Model.StatusId == EntityLayer.Concrete.RequestStatus.Taslak;
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row pt-4">
+            <div class="col-md-8 mx-auto">
+                <div class="card card-warning card-outline shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title text-bold"><i class="fas fa-edit mr-2"></i> Talebi Düzenle (#@Model.RequestNo)</h3>
+                    </div>
+
+                    @using (Html.BeginForm("Edit", "Request", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.RequestId)
+
+                        <div class="card-body">
+                            @if (Model.StatusId == EntityLayer.Concrete.RequestStatus.Reddedildi && !string.IsNullOrEmpty(Model.ApprovalNotes))
+                            {
+                                <div class="alert alert-danger alert-dismissible shadow border-0">
+                                    <h5><i class="icon fas fa-ban"></i> Red Gerekçesi!</h5>
+                                    <p class="mb-0">@Model.ApprovalNotes</p>
+                                </div>
+                                <hr />
+                            }
+                            @if (!isEditable)
+                            {
+                                <div class="alert alert-info mb-2">
+                                    Bu talep güncellenemez (<strong>@Model.StatusId.ToString()</strong> statüsünde)!
+                                </div>
+                            }
+                            <div class="form-group">
+                                <label>Başlık</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                                    </div>
+                                    @Html.TextBoxFor(x => x.Title, isEditable
+                                        ? new { @class = "form-control" }
+                                        : new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                <label>Açıklama</label>
+                                @Html.TextAreaFor(x => x.Description, isEditable
+                                    ? new { @class = "form-control", rows = 5 }
+                                    : new { @class = "form-control", rows = 5, @readonly = "readonly" })
+                                @Html.ValidationMessageFor(x => x.Description, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Talep Türü</label>
+                                        @Html.DropDownListFor(x => x.RequestTypeId,
+                                            new SelectList(Enum.GetValues(typeof(EntityLayer.Concrete.RequestType))),
+                                            isEditable
+                                                ? new { @class = "form-control" }
+                                                : new { @class = "form-control", @disabled = "disabled" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Öncelik</label>
+                                        @Html.DropDownListFor(x => x.PriorityId,
+                                            new SelectList(Enum.GetValues(typeof(EntityLayer.Concrete.Priority))),
+                                            isEditable
+                                                ? new { @class = "form-control" }
+                                                : new { @class = "form-control", @disabled = "disabled" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-light">
+                            @if (isEditable)
+                            {
+                                <button type="submit" class="btn btn-warning float-right shadow-sm ml-2">
+                                    <i class="fas fa-save mr-1"></i> Değişiklikleri Kaydet
+                                </button>
+                            }
+                            <a href="/Request/MyRequests" class="btn btn-default float-right">Vazgeç</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    $('form').submit(function () {
+        swal({ title: "Güncelleniyor...", text: "Lütfen bekleyiniz", icon: "info", buttons: false });
+    });
+</script>

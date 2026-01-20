@@ -51,6 +51,11 @@ namespace DataAccessLayer.Concrete.Repositories
             return _object.Where(filter).ToList();
         }
 
+        public IQueryable<T> Query()
+        {
+            return _object.AsQueryable();
+        }
+
         public void Update(T entity)
         {
             var updatedEntity = c.Entry(entity);
