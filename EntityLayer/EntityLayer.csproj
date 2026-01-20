@@ -45,6 +45,7 @@
     <Compile Include="Concrete\Enums.cs" />
     <Compile Include="Concrete\Request.cs" />
     <Compile Include="Concrete\RequestHistory.cs" />
+    <Compile Include="Concrete\RequestHistoryActions.cs" />
     <Compile Include="Concrete\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,0 +1,124 @@
+﻿@using EntityLayer.Concrete
+@using PagedList
+@using PagedList.Mvc
+@model PagedList.IPagedList<EntityLayer.Concrete.Request>
+
+@{
+    ViewBag.Title = "Onay Masası";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-user-shield mr-2"></i>Yönetici Onay Paneli</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-primary card-outline shadow-sm">
+            <div class="card-header border-transparent">
+                <h3 class="card-title text-bold">Bekleyen Talepler (@Model.TotalItemCount)</h3>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover m-0">
+                        <thead>
+                            <tr>
+                                <th>Talep No</th>
+                                <th>Başlık</th>
+                                <th>Tür / Öncelik</th>
+                                <th>Oluşturma Tarihi</th>
+                                <th class="text-center">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">Onay bekleyen herhangi bir talep bulunamadı.</td>
+                                </tr>
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-bold text-primary">#@item.RequestNo</td>
+                                    <td>@item.Title</td>
+                                    <td>
+                                        <span class="badge badge-info">@((RequestType)item.RequestTypeId)</span>
+                                        <span class="badge badge-danger">@((Priority)item.PriorityId)</span>
+                                    </td>
+                                    <td>@item.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <a href="@Url.Action("Details", "Request", new { id = @item.RequestId })" class="btn btn-default btn-sm border shadow-sm" title="Detay">
+                                                <i class="fas fa-eye text-primary"></i>
+                                            </a>
+                                            <button type="button" onclick="approveRequest(@item.RequestId)" class="btn btn-success btn-sm" title="Onayla">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button type="button" onclick="rejectRequest(@item.RequestId)" class="btn btn-danger btn-sm" title="Reddet">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white">
+                @Html.PagedListPager(Model, page => Url.Action("AdminRequestList", new { page }), new PagedListRenderOptions
+                {
+                    LiElementClasses = new List<string> { "page-item" },
+                    UlElementClasses = new List<string> { "pagination pagination-sm m-0 float-right" }
+                })
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    // ONAYLA BUTONU
+    function approveRequest(id) {
+        swal({
+            title: "Onaylıyor musunuz?",
+            text: "Bu talep onaylanacak ve işleme alınacaktır.",
+            icon: "warning",
+            buttons: ["Vazgeç", "Evet, Onayla"],
+            dangerMode: false,
+        }).then((willApprove) => {
+            if (willApprove) {
+                window.location.href = "/Request/Approve/" + id;
+            }
+        });
+    }
+
+    // REDDET BUTONU 
+    function rejectRequest(id) {
+        swal({
+            title: "Red Gerekçesi",
+            text: "Lütfen bu talebi neden reddettiğinizi kısaca yazın:",
+            content: "input",
+            icon: "error",
+            buttons: ["İptal", "Reddet"],
+            dangerMode: true,
+        }).then((reason) => {
+            if (reason === null) return false;
+            if (reason === "") {
+                swal("Hata!", "Gerekçe yazmadan reddedemezsiniz.", "error");
+                return false;
+            }
+            // Red metoduna hem ID hem de yazılan notu gönderiyoruz
+            window.location.href = "/Request/Reject?id=" + id + "&reason=" + encodeURIComponent(reason);
+        });
+    }
+</script>

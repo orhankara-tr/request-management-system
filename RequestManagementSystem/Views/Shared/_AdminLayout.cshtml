@@ -3,7 +3,7 @@
 }
 
 @{
-    var roleId = Session["RoleId"]?.ToString();
+    var roleId = Session["RoleId"] != null ? Convert.ToInt32(Session["RoleId"]) : 0;
 }
 
 <!DOCTYPE html>
@@ -15,6 +15,7 @@
 
     <title>Talep Yönetim Sistemi</title>
 
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="~/AdminLTE-3.0.4/plugins/fontawesome-free/css/all.min.css">
     <!-- IonIcons -->
@@ -39,7 +40,7 @@ to get the desired effect
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
+            <a href="#" class="brand-link">
                 <img src="~/AdminLTE-3.0.4/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                      style="opacity: .8">
                 <span class="brand-text font-weight-light">Talep Yönetim Sistemi</span>
@@ -49,10 +50,10 @@ to get the desired effect
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="~/AdminLTE-3.0.4/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                        <img src="~/AdminLTE-3.0.4/dist/img/profile.png" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="/User/Profile" class="d-block">@Session["FullName"]</a>
+                        <a href="#" class="d-block">@Session["FullName"]</a>
                         <small class="text-muted d-block">@Session["RoleName"]</small>
                     </div>
                 </div>
@@ -61,99 +62,106 @@ to get the desired effect
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
+                    with font-awesome or any other icon font library -->
                         <li class="nav-item has-treeview menu-open">
-                            <a href="#" class="nav-link active">
+                            <a href="/Home/Index" class="nav-link">
                                 <!-- Dinamik olması için bakılacak sonra-->
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <i class="nav-icon fas fa-home"></i>
                                 <p>
                                     Ana Sayfa
                                 </p>
                             </a>
                         </li>
 
-                        <!-- Kullanıcı Yönetimi (Sadece Admin Görsün) -->
-                        @if (Session["RoleId"]?.ToString() == "3")
+                        <!-- Kullanıcı Yönetimi (Sadece Admin) -->
+                        @if (roleId == 3)
                         {
-                            <li class="nav-item">
-                                <a href="/User" class="nav-link">
+                            <li class="nav-item" has-treeview>
+                                <a href="#" class="nav-link">
                                     <i class="nav-icon fas fa-users"></i>
-                                    <p>Kullanıcı Yönetimi</p>
-                                    <i class="fas fa-angle-left right"></i>
+                                    <p>
+                                        Kullanıcı Yönetimi
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
                                 </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/AdminUser/AddUser" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kullanıcı Ekle</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/AdminUser/Index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kullanıcı Listesi</p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         }
 
                         <!-- Talepler -->
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>
-                                    Talepler
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
+                        @if (roleId == 1 || roleId == 2)
+                        {
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-copy"></i>
+                                    <p>
+                                        Talepler
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
 
-                                @if (roleId == "1")
-                                {
-                                    <li class="nav-item">
-                                        <a href="/Request/Create" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Talep Oluştur</p>
-                                        </a>
-                                    </li>
+                                    @if (roleId == 1)
+                                    {
+                                        <li class="nav-item">
+                                            <a href="/Request/Create" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Talep Oluştur</p>
+                                            </a>
+                                        </li>
 
-                                    <li class="nav-item">
-                                        <a href="/Request/MyRequests" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Taleplerim</p>
-                                        </a>
-                                    </li>
-                                }
+                                        <li class="nav-item">
+                                            <a href="/Request/MyRequests" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Taleplerim</p>
+                                            </a>
+                                        </li>
+                                    }
 
-                                @if (roleId == "2")
-                                {
-                                    <li class="nav-item">
-                                        <a href="/Request/Pending" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Onay Bekleyenler</p>
-                                        </a>
-                                    </li>
+                                    @if (roleId == 2)
+                                    {
+                                        <li class="nav-item">
+                                            <a href="/Request/AdminRequestList" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Onay Bekleyenler</p>
+                                            </a>
+                                        </li>
 
-                                    <li class="nav-item">
-                                        <a href="/Request/All" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Tüm Talepler</p>
-                                        </a>
-                                    </li>
-                                }
+                                        <li class="nav-item">
+                                            <a href="/Request/Index" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Tüm Talepler</p>
+                                            </a>
+                                        </li>
 
-                                @if (roleId == "3")
-                                {
-                                    <li class="nav-item">
-                                        <a href="/Request/All" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Tüm Talepler</p>
-                                        </a>
-                                    </li>
-                                }
+                                        <li class="nav-item">
+                                            <a href="/RequestHistory/Index" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Kayıt Geçmişi</p>
+                                            </a>
+                                        </li>
+                                    }
 
-                            </ul>
-                        </li>
-
-                        <li class="nav-item has-treeview">
-                            <a href="/ErrorPage/Page404/" class="nav-link">
-                                <i class="nav-icon far fa-envelope"></i>
-                                <p>
-                                    Hata Sayfaları
-                                </p>
-                            </a>
-                        </li>
+                                </ul>
+                            </li>
+                        }
 
                         <li class="nav-item">
-                            <a href="/Account/Logout" class="nav-link">
-                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                            <a href="javascript:void(0)" onclick="LogoutCheck()" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt text-danger"></i>
                                 <p>Çıkış Yap</p>
                             </a>
                         </li>
@@ -197,5 +205,19 @@ to get the desired effect
     <script src="~/AdminLTE-3.0.4/plugins/chart.js/Chart.min.js"></script>
     <script src="~/AdminLTE-3.0.4/dist/js/demo.js"></script>
     <script src="~/AdminLTE-3.0.4/dist/js/pages/dashboard3.js"></script>
+    <script>
+        function LogoutCheck() {
+            swal({
+                title: "Oturumu Kapat?",
+                text: "Sistemden çıkış yapmak üzeresiniz!",
+                icon: "warning",
+                buttons: ["Vazgeç", "Evet, Çıkış Yap!"],
+                dangerMode: true,
+            }).then((willLogout) => {
+                if (willLogout) {
+                    window.location.href = "/Login/Index";
+                }
+            });
+        }</script>
 </body>
 </html>

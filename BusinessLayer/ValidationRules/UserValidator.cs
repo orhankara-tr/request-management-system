@@ -1,4 +1,6 @@
-﻿using EntityLayer.Concrete;
+﻿using BusinessLayer.Concrete;
+using DataAccessLayer.EntityFramework;
+using EntityLayer.Concrete;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -21,6 +23,13 @@ namespace BusinessLayer.ValidationRules
                 RuleFor(x => x.FullName).NotEmpty().WithMessage("Ad boş geçilemez");
                 RuleFor(x => x.FullName).MinimumLength(5).WithMessage("Lütfen en az 5 karakter girişi yapınız");
                 RuleFor(x => x.RoleId).NotEmpty().WithMessage("Rol boş geçilemez");
+                RuleFor(x => x.Email).Must(BeUniqueEmail).WithMessage("Bu e-posta zaten kullanımda.");
+        }
+
+        public bool BeUniqueEmail(string email)
+        {
+            UserManager userManager = new UserManager(new EFUserDal());
+            return !userManager.List().Any(x => x.Email == email);
         }
     }
 }

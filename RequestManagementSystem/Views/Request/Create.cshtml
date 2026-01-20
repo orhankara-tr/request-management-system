@@ -1,0 +1,107 @@
+﻿@model EntityLayer.Concrete.Request
+
+@{
+    ViewBag.Title = "Yeni Talep Oluştur";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row pt-4">
+            <div class="col-md-8 mx-auto">
+
+                <div class="card card-primary card-outline shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title text-bold"><i class="fas fa-plus-circle mr-2"></i> Yeni Talep Oluştur</h3>
+                    </div>
+
+                    @using (Html.BeginForm("Create", "Request", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Başlık</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                                    </div>
+                                    @Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = "Talep başlığı..." })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger d-block mt-1" })
+                            </div>
+
+                            <div class="form-group">
+                                <label>Açıklama</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                                    </div>
+                                    @Html.TextAreaFor(x => x.Description, new { @class = "form-control", rows = 5, placeholder = "Talep detaylarını yazın..." })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.Description, "", new { @class = "text-danger d-block mt-1" })
+                            </div>
+
+                            <hr />
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Talep Türü</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                            </div>
+                                            @Html.DropDownListFor(
+                                                x => x.RequestTypeId,
+                                                new SelectList(Enum.GetValues(typeof(EntityLayer.Concrete.RequestType))),
+                                                new { @class = "form-control" }
+                                            )
+                                        </div>
+                                        @Html.ValidationMessageFor(x => x.RequestTypeId, "", new { @class = "text-danger text-sm" })
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Öncelik</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-exclamation"></i></span>
+                                            </div>
+                                            @Html.DropDownListFor(x => x.PriorityId,
+                                                new SelectList(Enum.GetValues(typeof(EntityLayer.Concrete.Priority))),
+                                                "-- Seçiniz --",
+                                                new { @class = "form-control" })
+                                        </div>
+                                        @Html.ValidationMessageFor(x => x.PriorityId, "", new { @class = "text-danger text-sm" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-light">
+                            <button type="submit" id="btn-save" class="btn btn-primary float-right shadow-sm ml-2">
+                                <i class="fas fa-check mr-1"></i> Kaydı Tamamla
+                            </button>
+                            <a href="/Home/Index" class="btn btn-default float-right">İptal</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    $('form').submit(function (e) {
+        swal({
+            title: "İşlem Yapılıyor",
+            text: "Lütfen bekleyiniz...",
+            icon: "info",
+            buttons: false,
+            closeOnClickOutside: false
+        });
+    });
+</script>

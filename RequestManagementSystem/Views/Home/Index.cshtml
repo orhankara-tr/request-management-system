@@ -1,33 +1,122 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Ana Sayfa";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
+@{
+    var roleId = Session["RoleId"] != null ? Convert.ToInt32(Session["RoleId"]) : 0;
+}
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+
+            @* --- YÖNETİCİ PANELİ (Role: 2) --- *@
+            @if (roleId == 2)
+            {
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info shadow">
+                        <div class="inner">
+                            <h3>@ViewBag.ToplamTalepSayisi</h3>
+                            <p>Sistemdeki Toplam Talep</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-list"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-success shadow">
+                        <div class="inner">
+                            <h3>@ViewBag.OnayBekleyenSayi</h3>
+                            <p>Bekleyen Onay Sayısı</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <a href="/Request/Pending" class="small-box-footer">Onaylamaya Git <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+            }
+
+            @*--- KULLANICI PANELİ (Role: 1) --- *@
+            @if (roleId == 1)
+            {
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-primary shadow">
+                        <div class="inner">
+                            <h3>@ViewBag.TaleplerimSayi</h3>
+                            <p>Taleplerim</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <a href="/Request/MyRequests" class="small-box-footer">Taleplerime Git <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-warning shadow">
+                        <div class="inner">
+                            <h3>@ViewBag.BekleyenIslerSayi</h3>
+                            <p>Taslak Taleplerim</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @* --- ADMIN PANELİ (Role: 3) --- *@
+            @if (roleId == 3)
+            {
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-danger shadow">
+                        <div class="inner">
+                            <h3>@ViewBag.ToplamKullaniciSayi</h3>
+                            <p>Toplam Kayıtlı Kullanıcı</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <a href="/AdminUser/Index" class="small-box-footer">Kullanıcı Yönetimi <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                @*<div class="col-lg-3 col-6">
+                <div class="small-box bg-info shadow">
+                    <div class="inner">
+                        <h3>@ViewBag.ToplamTalepSayisi</h3>
+                        <p>Toplam Talep</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                </div>
+            </div>*@
+            }
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary card-outline shadow">
+                    <div class="card-header">
+                        <h3 class="card-title">Sisteme Hoş Geldiniz</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img src="~/AdminLTE-3.0.4/dist/img/AdminLTELogo.png" alt="Logo" class="img-fluid mb-3" style="max-width: 120px; opacity: .8">
+                            <h2 class="text-primary font-weight-bold">Talep Yönetim Sistemi</h2>
+                            <p class="lead">Kullanıcı Rolünüz: <b>@(roleId == 3 ? "Admin" : roleId == 2 ? "Yönetici" : "Kullanıcı")</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-</main>
+</section>
