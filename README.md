@@ -49,7 +49,7 @@ Kurulum
 	<connectionStrings>
 		<add name="Context" connectionString="data source = DESKTOP-XXXX\SQLEXPRESS; initial catalog = DbRequestManagementSystem; integrated security = true" providerName="System.Data.SqlClient" />
 	</connectionStrings>
-
+- Package Manager Console: Update-Package -reinstall çalıştırılmalı
 - Package Manager Console: DataAccessLayer Seçilmeli
    - İlk kurulum: `Enable-Migrations` → `Add-Migration InitialCreate` → `Update-Database`
   
